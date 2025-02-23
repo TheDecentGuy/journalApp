@@ -19,10 +19,10 @@ public class JournalEntryController {
     @Autowired
     private JournalServices services;
 
-    @GetMapping("{username}")
-    public ResponseEntity<?> getAllJournalEntriesOfUser(@PathVariable String username) {
+    @GetMapping
+    public ResponseEntity<?> getAllJournalEntriesOfUser() {
 
-        List<JournalEntry> list = services.getEntry(username);
+        List<JournalEntry> list = services.getEntry();
         if (list != null) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -30,39 +30,24 @@ public class JournalEntryController {
         }
     }
 
-    @PostMapping("{username}")
-    public ResponseEntity<?> createJournalEntriesOfUser(@RequestBody JournalEntry Journal, @PathVariable String username) {
-        return services.createJournalEntriesOfUser(Journal, username);
+    @PostMapping
+    public ResponseEntity<?> createJournalEntriesOfUser(@RequestBody JournalEntry Journal) {
+        return services.createJournalEntriesOfUser(Journal);
     }
 
-    @GetMapping("GetByID/{MyID}")
+    @GetMapping("{MyID}")
     public ResponseEntity<?> GetByID(@PathVariable ObjectId MyID) {
-        Optional<JournalEntry> journalEntry = services.getEntryID(MyID);
-        if (journalEntry.isPresent()) {
-            return new ResponseEntity<>(journalEntry, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+        return services.getEntryID(MyID);
     }
 
-    @PutMapping("update/{JournalID}")
+    @PutMapping("{JournalID}")
     public ResponseEntity<?> updateByID(@PathVariable ObjectId JournalID, @RequestBody JournalEntry NewEntry) {
-        ResponseEntity<?> newEntry = services.UpdateData(NewEntry, JournalID);
-        if (newEntry != null) {
-            return new ResponseEntity<>(HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-        }
+        return services.UpdateData(NewEntry, JournalID);
     }
 
-    @GetMapping("getJournalID/{username}")
-    public ResponseEntity<?> getJournalID(@PathVariable String username) {
-        return services.getJournalID(username);
-    }
-
-    @DeleteMapping("{username}/{journalID}")
-    public ResponseEntity<?> deleteJournal(@PathVariable String username, @PathVariable ObjectId journalID) {
-        return services.deleteJournalEntry(username,journalID);
+    @DeleteMapping("{journalID}")
+    public ResponseEntity<?> deleteJournal( @PathVariable ObjectId journalID) {
+        return services.deleteJournalEntry(journalID);
     }
 
 }
