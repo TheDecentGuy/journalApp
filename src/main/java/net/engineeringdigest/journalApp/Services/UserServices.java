@@ -13,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,13 +27,13 @@ public class UserServices {
 
     public Users saveNewUser(Users user) {
         user.setPassword(encoder.encode(user.getPassword()));
-        user.setRoles(Arrays.asList("User"));
+        user.setRoles(Collections.singletonList("User"));
         return userEntryRepo.save(user);
     }
 
     public Users saveUser(Users user) {
         user.setPassword(user.getPassword());
-        user.setRoles(Arrays.asList("User"));
+        user.setRoles(Collections.singletonList("User"));
         return userEntryRepo.save(user);
     }
 
