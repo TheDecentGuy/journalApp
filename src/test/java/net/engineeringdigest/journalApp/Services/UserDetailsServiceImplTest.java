@@ -9,16 +9,14 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import java.util.ArrayList;
 import java.util.Collections;
 
 import static org.mockito.Mockito.*;
 
-public class UserDetailsServiceImplTEST {
+public class UserDetailsServiceImplTest {
 
     @InjectMocks
     public UserDetailsServiceImpl userDetailsService;

@@ -20,10 +20,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         Users users = userEntryRepo.findByusername(username);
         if (users != null) {
             return User.builder()
-                     .username(users.getUsername())
-                     .password(users.getPassword())
-                     .roles(users.getRoles().toArray(new String[0])).build();
+                    .username(users.getUsername())
+                    .password(users.getPassword())
+                    .roles(users.getRoles().toArray(new String[0])).build();
         }
-        throw new UsernameNotFoundException("User not found with username: "+username);
+        throw new UsernameNotFoundException("User not found with username: " + username);
     }
 }

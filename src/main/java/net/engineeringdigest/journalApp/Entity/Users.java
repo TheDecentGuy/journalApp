@@ -1,9 +1,6 @@
 package net.engineeringdigest.journalApp.Entity;
 
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -14,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "Users")
-@Data
+@Data  //This is necessary
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class Users {
     @Id
