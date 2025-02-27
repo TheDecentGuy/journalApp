@@ -2,6 +2,7 @@ package net.engineeringdigest.journalApp.Services;
 
 import net.engineeringdigest.journalApp.apiResponse.WeatherResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class WeatherService {
-    private static final String API_KEY = "7ac78dc026694f7097195104252702";
+    @Value("${weather.APIKEY}")
+    private String APIKEY;
     private static final String URL = "http://api.weatherapi.com/v1/current.json";
 
 
@@ -22,7 +24,7 @@ public class WeatherService {
 
     public WeatherResponse getWeather(String city) {
         String uriString = UriComponentsBuilder.fromHttpUrl(URL)
-                .queryParam("key", API_KEY)
+                .queryParam("key", APIKEY)
                 .queryParam("q", city)
                 .toUriString();
 
