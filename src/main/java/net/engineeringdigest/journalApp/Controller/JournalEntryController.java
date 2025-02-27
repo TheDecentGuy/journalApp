@@ -44,7 +44,7 @@ public class JournalEntryController {
     }
 
     @PutMapping("{journalID}")
-    public ResponseEntity<?> updateByID(@PathVariable ObjectId journalID, @RequestBody JournalEntry newEntry) {
+    public ResponseEntity<JournalEntry> updateByID(@PathVariable ObjectId journalID, @RequestBody JournalEntry newEntry) {
         return journalServices.updateData(newEntry, journalID);
     }
 

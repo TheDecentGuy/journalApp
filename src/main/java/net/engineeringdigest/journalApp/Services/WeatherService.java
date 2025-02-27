@@ -30,11 +30,4 @@ public class WeatherService {
         return response.getBody();
     }
 
-//    public WeatherResponse setWeather(Users user) { this is demo code for performing POST to external api. Dont uncomment it will not run
-//    HttpHeaders httpHeaders = new HttpHeaders();
-//    httpHeaders.set("key",value);
-//    HttpEntity<Users> requestEntity = new HttpEntity<>(user,httpHeaders);
-//        ResponseEntity<WeatherResponse>response= restTemplate.exchange(uriString, HttpMethod.POST,requestEntity, WeatherResponse.class);
-//        return response.getBody();
-//    }
 }
