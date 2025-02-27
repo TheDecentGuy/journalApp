@@ -2,6 +2,7 @@ package net.engineeringdigest.journalApp.Controller;
 
 
 import net.engineeringdigest.journalApp.Entity.JournalEntry;
+import net.engineeringdigest.journalApp.Entity.Users;
 import net.engineeringdigest.journalApp.Services.JournalServices;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,19 +10,22 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("Journal")
 public class JournalEntryController {
 
+    private JournalServices journalServices;
     @Autowired
-    private JournalServices services;
+    private void setJournalServices(JournalServices journalServices) {
+        this.journalServices =  journalServices;
+    }
 
     @GetMapping
-    public ResponseEntity<?> getAllJournalEntriesOfUser() {
+    public ResponseEntity<List<JournalEntry>> getAllJournalEntriesOfUser() {
 
-        List<JournalEntry> list = services.getEntry();
+        List<JournalEntry> list = journalServices.getEntry();
         if (list != null) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -30,23 +34,23 @@ public class JournalEntryController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createJournalEntriesOfUser(@RequestBody JournalEntry Journal) {
-        return services.createJournalEntriesOfUser(Journal);
+    public ResponseEntity<Users> createJournalEntriesOfUser(@RequestBody JournalEntry Journal) {
+        return journalServices.createJournalEntriesOfUser(Journal);
     }
 
-    @GetMapping("{MyID}")
-    public ResponseEntity<?> GetByID(@PathVariable ObjectId MyID) {
-        return services.getEntryID(MyID);
+    @GetMapping("{myID}")
+    public ResponseEntity<JournalEntry> getByID(@PathVariable ObjectId myID) {
+        return journalServices.getEntryID(myID);
     }
 
-    @PutMapping("{JournalID}")
-    public ResponseEntity<?> updateByID(@PathVariable ObjectId JournalID, @RequestBody JournalEntry NewEntry) {
-        return services.updateData(NewEntry, JournalID);
+    @PutMapping("{journalID}")
+    public ResponseEntity<?> updateByID(@PathVariable ObjectId journalID, @RequestBody JournalEntry newEntry) {
+        return journalServices.updateData(newEntry, journalID);
     }
 
     @DeleteMapping("{journalID}")
-    public ResponseEntity<?> deleteJournal( @PathVariable ObjectId journalID) {
-        return services.deleteJournalEntry(journalID);
+    public ResponseEntity<String> deleteJournal(@PathVariable ObjectId journalID) {
+        return journalServices.deleteJournalEntry(journalID);
     }
 
 }

@@ -21,51 +21,56 @@ import java.util.stream.Collectors;
 @Service
 public class JournalServices {
 
-    @Autowired
     private JournalEntryRepo journalEntryRepo;
+
     @Autowired
+    public void setJournalEntryRepo(JournalEntryRepo journalEntryRepo) {
+        this.journalEntryRepo = journalEntryRepo;
+    }
+
     private UserEntryRepo userEntryRepo;
 
-
     @Autowired
-    private UserEntryRepo userDB;
+    public void setUserEntryRepo(UserEntryRepo userEntryRepo) {
+        this.userEntryRepo = userEntryRepo;
+    }
 
     @Transactional
-    public ResponseEntity<?> createJournalEntriesOfUser(JournalEntry journalEntry) {
+    public ResponseEntity<Users> createJournalEntriesOfUser(JournalEntry journalEntry) {
         try {
             Date date = new Date();
             journalEntry.setDate(date);
             Authentication auth = SecurityContextHolder.getContext().getAuthentication();
             Users userIndb = userEntryRepo.findByusername(auth.getName());
-            Users user = userDB.findByusername(userIndb.getUsername());
+            Users user = userEntryRepo.findByusername(userIndb.getUsername());
             JournalEntry saved = journalEntryRepo.save(journalEntry);
             user.getJournalEntries().add(saved);
-            userDB.save(user);
+            userEntryRepo.save(user);
             return new ResponseEntity<>(user, HttpStatus.CREATED);
         } catch (Exception e) {
-            return new ResponseEntity<>(e, HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
 
     public List<JournalEntry> getEntry() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users userIndb = userEntryRepo.findByusername(auth.getName());
-        Users user = userDB.findByusername(userIndb.getUsername());
+        Users user = userEntryRepo.findByusername(userIndb.getUsername());
         return user.getJournalEntries();
     }
 
-    public ResponseEntity<?> getEntryID(ObjectId id) {
+    public ResponseEntity<JournalEntry> getEntryID(ObjectId id) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users userIndb = userEntryRepo.findByusername(auth.getName());
         List<JournalEntry> list = userIndb.getJournalEntries().stream().filter(x -> x.getId().equals(id)).collect(Collectors.toList());
         if (!list.isEmpty()) {
             return new ResponseEntity<>(journalEntryRepo.findById(id).orElse(null), HttpStatus.FOUND);
         } else {
-            return new ResponseEntity<>("Given ID is not associated With your Username or It may not be Present.", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    public ResponseEntity<?> updateData(JournalEntry newEntry, ObjectId journalID) {
+    public ResponseEntity<JournalEntry> updateData(JournalEntry newEntry, ObjectId journalID) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users userIndb = userEntryRepo.findByusername(auth.getName());
         List<JournalEntry> list = userIndb.getJournalEntries().stream().filter(x -> x.getId().equals(journalID)).collect(Collectors.toList());
@@ -75,24 +80,24 @@ public class JournalServices {
             oldEntry.setContent(newEntry.getContent());
             return new ResponseEntity<>(journalEntryRepo.save(oldEntry), HttpStatus.CREATED);
         }
-        return new ResponseEntity<>("Given ID is not associated With your Username or It may not be Present.", HttpStatus.FORBIDDEN);
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
     }
 
-    public ResponseEntity<?> getJournalID(String username) {
-        Users user = userDB.findByusername(username);
+    public ResponseEntity<List<JournalEntry>> getJournalID(String username) {
+        Users user = userEntryRepo.findByusername(username);
         List<JournalEntry> list = user.getJournalEntries();
         return new ResponseEntity<>(list, HttpStatus.FOUND);
     }
 
-    public ResponseEntity<?> deleteJournalEntry( ObjectId journalID) {
+    public ResponseEntity<String> deleteJournalEntry(ObjectId journalID) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users userIndb = userEntryRepo.findByusername(auth.getName());
         List<JournalEntry> list = userIndb.getJournalEntries().stream().filter(x -> x.getId().equals(journalID)).collect(Collectors.toList());
         if (!list.isEmpty()) {
             userIndb.getJournalEntries().removeIf(x -> x.getId().equals(journalID));
-            userDB.save(userIndb);
+            userEntryRepo.save(userIndb);
             journalEntryRepo.deleteById(journalID);
-            return new ResponseEntity<>("Record Delete Successfully",HttpStatus.OK);
+            return new ResponseEntity<>("Record Delete Successfully", HttpStatus.OK);
         }
         return new ResponseEntity<>("Given ID is not associated With your Username or It may not be Present.", HttpStatus.FORBIDDEN);
     }

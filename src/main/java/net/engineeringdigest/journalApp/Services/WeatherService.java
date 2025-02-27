@@ -10,15 +10,19 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 @Service
 public class WeatherService {
-    private static final String apiKey = "7ac78dc026694f7097195104252702";
-    private static final String url = "http://api.weatherapi.com/v1/current.json";
+    private static final String API_KEY = "7ac78dc026694f7097195104252702";
+    private static final String URL = "http://api.weatherapi.com/v1/current.json";
 
-    @Autowired
+
     private RestTemplate restTemplate;
+    @Autowired
+    private void setRestTemplate(RestTemplate restTemplate){
+        this.restTemplate = restTemplate;
+    }
 
     public WeatherResponse getWeather(String city) {
-        String uriString = UriComponentsBuilder.fromHttpUrl(url)
-                .queryParam("key", apiKey)
+        String uriString = UriComponentsBuilder.fromHttpUrl(URL)
+                .queryParam("key", API_KEY)
                 .queryParam("q", city)
                 .toUriString();
 

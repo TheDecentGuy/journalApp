@@ -19,8 +19,11 @@ import java.util.Optional;
 public class UserServices {
 
     private static final PasswordEncoder encoder = new BCryptPasswordEncoder();
-    @Autowired
     private UserEntryRepo userEntryRepo;
+    @Autowired
+    public void setUserEntryRepo(UserEntryRepo userEntryRepo){
+        this.userEntryRepo = userEntryRepo;
+    }
 
 
     public Users saveNewUser(Users user) {
@@ -44,7 +47,7 @@ public class UserServices {
     }
 
     //
-    public Users UpdateData( Users newUser) {
+    public Users updateData(Users newUser) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users userIndb = userEntryRepo.findByusername(auth.getName());
         userIndb.setUsername(newUser.getUsername());

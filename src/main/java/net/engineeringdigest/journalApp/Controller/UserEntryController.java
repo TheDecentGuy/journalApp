@@ -3,7 +3,6 @@ package net.engineeringdigest.journalApp.Controller;
 
 import net.engineeringdigest.journalApp.Entity.Users;
 import net.engineeringdigest.journalApp.Services.UserServices;
-import net.engineeringdigest.journalApp.Services.WeatherService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,13 +16,16 @@ import java.util.Optional;
 @RequestMapping("Users")
 public class UserEntryController {
 
+    private UserServices userServices;
     @Autowired
-    private UserServices services;
+    public void setUserServices(UserServices userServices){
+        this.userServices = userServices;
+    }
 
     @GetMapping()
-    public ResponseEntity<?> getEntry() {
+    public ResponseEntity<List<Users>> getEntry() {
 
-        List<Users> list = services.getEntry();
+        List<Users> list = userServices.getEntry();
         if (list != null) {
             return new ResponseEntity<>(list, HttpStatus.OK);
         } else {
@@ -34,8 +36,8 @@ public class UserEntryController {
 
 
     @PostMapping()
-    public ResponseEntity<?> saveEntry(@RequestBody Users user) {
-        Users usersEntry = services.saveNewUser(user);
+    public ResponseEntity<Users> saveEntry(@RequestBody Users user) {
+        Users usersEntry = userServices.saveNewUser(user);
         if (usersEntry != null) {
             return new ResponseEntity<>(usersEntry, HttpStatus.CREATED);
         } else {
@@ -44,8 +46,8 @@ public class UserEntryController {
     }
 
     @GetMapping("GetByID/{MyID}")
-    public ResponseEntity<?> GetByID(@PathVariable ObjectId MyID) {
-        Optional<Users> userEntry = services.getEntryID(MyID);
+    public ResponseEntity<Optional<Users>> getByID(@PathVariable ObjectId MyID) {
+        Optional<Users> userEntry = userServices.getEntryID(MyID);
         if (userEntry.isPresent()) {
             return new ResponseEntity<>(userEntry, HttpStatus.OK);
         } else {
@@ -54,10 +56,10 @@ public class UserEntryController {
     }
 
     @PutMapping
-    public ResponseEntity<?> updateByID(@RequestBody Users newUser) {
-        Users UserEntry = services.UpdateData(newUser);
-        if (UserEntry != null) {
-            return new ResponseEntity<>(UserEntry, HttpStatus.OK);
+    public ResponseEntity<Users> updateByID(@RequestBody Users newUser) {
+        Users users = userServices.updateData(newUser);
+        if (users != null) {
+            return new ResponseEntity<>(users, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
