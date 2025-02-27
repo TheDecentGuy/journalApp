@@ -11,15 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Component
+@Service
 public class JournalServices {
 
     @Autowired
@@ -66,10 +65,10 @@ public class JournalServices {
         }
     }
 
-    public ResponseEntity<?> UpdateData(JournalEntry newEntry, ObjectId JournalID) {
+    public ResponseEntity<?> updateData(JournalEntry newEntry, ObjectId journalID) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         Users userIndb = userEntryRepo.findByusername(auth.getName());
-        List<JournalEntry> list = userIndb.getJournalEntries().stream().filter(x -> x.getId().equals(JournalID)).collect(Collectors.toList());
+        List<JournalEntry> list = userIndb.getJournalEntries().stream().filter(x -> x.getId().equals(journalID)).collect(Collectors.toList());
         if (!list.isEmpty()) {
             JournalEntry oldEntry = list.get(0);
             oldEntry.setTitle(newEntry.getTitle());

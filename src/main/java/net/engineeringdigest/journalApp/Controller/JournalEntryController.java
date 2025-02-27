@@ -2,7 +2,6 @@ package net.engineeringdigest.journalApp.Controller;
 
 
 import net.engineeringdigest.journalApp.Entity.JournalEntry;
-import net.engineeringdigest.journalApp.Entity.Users;
 import net.engineeringdigest.journalApp.Services.JournalServices;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,7 @@ public class JournalEntryController {
 
     @PutMapping("{JournalID}")
     public ResponseEntity<?> updateByID(@PathVariable ObjectId JournalID, @RequestBody JournalEntry NewEntry) {
-        return services.UpdateData(NewEntry, JournalID);
+        return services.updateData(NewEntry, JournalID);
     }
 
     @DeleteMapping("{journalID}")
