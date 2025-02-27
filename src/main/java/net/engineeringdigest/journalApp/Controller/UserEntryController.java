@@ -3,6 +3,7 @@ package net.engineeringdigest.journalApp.Controller;
 
 import net.engineeringdigest.journalApp.Entity.Users;
 import net.engineeringdigest.journalApp.Services.UserServices;
+import net.engineeringdigest.journalApp.Services.WeatherService;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,8 @@ public class UserEntryController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
 
     @PostMapping()
     public ResponseEntity<?> saveEntry(@RequestBody Users user) {
