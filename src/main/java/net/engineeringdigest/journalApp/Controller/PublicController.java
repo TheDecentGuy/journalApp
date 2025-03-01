@@ -2,6 +2,7 @@ package net.engineeringdigest.journalApp.Controller;
 
 
 import net.engineeringdigest.journalApp.Entity.Users;
+import net.engineeringdigest.journalApp.Repository.UserRepositoryImpl;
 import net.engineeringdigest.journalApp.Services.UserServices;
 import net.engineeringdigest.journalApp.Services.WeatherService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,10 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("Public")
 public class PublicController {
 
+    @Autowired
+    private UserRepositoryImpl userRepository ;
 
+    @Autowired
     private UserServices userServices;
     @Autowired
     public void userServices(UserServices userServices){
@@ -31,6 +35,10 @@ public class PublicController {
         return new ResponseEntity<>("Hii Vrushabh current temperature of "+city+" is "+ weatherService.getWeather(city).getCurrent().getTempC(),HttpStatus.OK);
     }
 
+    @GetMapping("Test")
+    public void testUserRepo( ) {
+        userRepository.getUserForSA();
+    }
     @PostMapping()
     public ResponseEntity<Users> saveEntry(@RequestBody Users user) {
         Users usersEntry = userServices.saveNewUser(user);

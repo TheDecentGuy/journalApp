@@ -2,6 +2,7 @@ package net.engineeringdigest.journalApp.Services;
 
 import net.engineeringdigest.journalApp.Entity.Users;
 import net.engineeringdigest.journalApp.Repository.UserEntryRepo;
+import net.engineeringdigest.journalApp.Repository.UserRepositoryImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,6 +10,9 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
@@ -16,6 +20,7 @@ import java.util.Collections;
 
 import static org.mockito.Mockito.*;
 
+@SpringBootTest
 public class UserDetailsServiceImplTest {
 
     @InjectMocks
@@ -48,4 +53,5 @@ public class UserDetailsServiceImplTest {
         when(userEntryRepo.findByusername(ArgumentMatchers.anyString())).thenReturn(null);
         Assertions.assertThrows(UsernameNotFoundException.class,()->{userDetailsService.loadUserByUsername("Test");});
     }
+
 }

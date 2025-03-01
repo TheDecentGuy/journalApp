@@ -19,6 +19,9 @@ public class Users {
     @Id
     private ObjectId id ;
 
+    private String email ;
+    private boolean sentimentAnalysis ;
+
     @Indexed(unique = true)
     @NonNull
     private String username ;
